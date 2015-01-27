@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 The Android Open-Source Project
+# Copyright 2012 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +14,16 @@
 # limitations under the License.
 #
 
-PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/aosp_flounder.mk \
-	$(LOCAL_DIR)/aosp_flounder64.mk \
-	$(LOCAL_DIR)/aosp_flounder32.mk \
-	$(LOCAL_DIR)/aosp_flounder_64_only.mk \
-	$(LOCAL_DIR)/omni_flounder.mk
+# Sample: This is where we'd set a backup provider if we had one
+# $(call inherit-product, device/sample/products/backup_overlay.mk)
+
+# Inherit from our custom product configuration
+$(call inherit-product, vendor/omni/config/common.mk)
+
+# Inherit device configuration
+$(call inherit-product, device/htc/flounder/device.mk)
+
+## Device identifier. This must come after all inclusions
+PRODUCT_NAME := omni_flounder
+PRODUCT_BRAND := google
+PRODUCT_MODEL := Nexus 9
