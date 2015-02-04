@@ -18,10 +18,10 @@
 # $(call inherit-product, device/sample/products/backup_overlay.mk)
 
 # Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/omni/config/common_tablet.mk)
 
 # Inherit device configuration
-$(call inherit-product, device/htc/flounder/device.mk)
+$(call inherit-product, device/htc/flounder/aosp_flounder64.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_NAME := omni_flounder
