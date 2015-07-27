@@ -29,3 +29,9 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/wifi_only_overlay
 PRODUCT_NAME := omni_flounder
 PRODUCT_BRAND := google
 PRODUCT_MODEL := Nexus 9
+
+# Fix for vendor / system prop mismatch
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRODUCT_NAME=flounder \
+    BUILD_FINGERPRINT=google/volantis/flounder:5.1.1/LMY47X/1849464:user/release-keys \
+    PRIVATE_BUILD_DESC="flounder-user 5.1.1 LMY47X 1849464 release-keys"
