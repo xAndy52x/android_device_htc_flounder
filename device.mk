@@ -246,7 +246,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     audio_hal.period_size=128
 
 # add verity dependencies
-$(call inherit-product, build/target/product/verity.mk)
 PRODUCT_SUPPORTS_BOOT_SIGNER := false
 PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/APP
 PRODUCT_VENDOR_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/VNR
