@@ -33,8 +33,9 @@ PRODUCT_MODEL := Nexus 9
 # Fix for vendor / system prop mismatch
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME=flounder \
-    BUILD_FINGERPRINT=google/volantis/flounder:5.1.1/LMY47X/1849464:user/release-keys \
-    PRIVATE_BUILD_DESC="flounder-user 5.1.1 LMY47X 1849464 release-keys"
+    BUILD_FINGERPRINT=google/volantis/flounder:6.0.1/MMB29S/2489379:user/releas$
+    PRIVATE_BUILD_DESC="volantis-user 6.0.1 MMB29S 2489379 release-keys" \
+    BUILD_ID=MMB29S
 
 # Kernel settings
 KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/aarch64/aarch64-linux-android-4.9/bin
@@ -51,9 +52,3 @@ RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-
-# Override Fingerprint
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT=google/volantis/flounder:6.0.1/MMB29K/2419427:user/release-keys \
-    PRIVATE_BUILD_DESC="volantis-user 6.0.1 MMB29K 2419427 release-keys" \
-    BUILD_ID=MMB29K
