@@ -30,6 +30,8 @@ PRODUCT_NAME := omni_flounder
 PRODUCT_BRAND := google
 PRODUCT_MODEL := Nexus 9
 
+BOARD_NEEDS_VENDORIMAGE_SYMLINK := true
+
 # Fix for vendor / system prop mismatch
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME=flounder \
