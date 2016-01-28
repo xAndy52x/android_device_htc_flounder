@@ -23,6 +23,9 @@ $(call inherit-product, vendor/omni/config/common_tablet.mk)
 # Inherit device configuration
 $(call inherit-product, device/htc/flounder/aosp_flounder64.mk)
 
+# Inherit device vendor (blobs)
+$(call inherit-product-if-exists, vendor/htc/flounder/device-vendor.mk)
+
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/wifi_only_overlay
 
 ## Device identifier. This must come after all inclusions
