@@ -48,8 +48,9 @@ TARGET_KERNEL_CONFIG := flounder_defconfig
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_CMDLINE := androidboot.selinux=enforcing
 
+
 # TWRP
-TW_INCLUDE_L_CRYPTO := true
+TW_INCLUDE_CRYPTO := true
 TW_THEME := landscape_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
