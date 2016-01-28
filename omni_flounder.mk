@@ -55,3 +55,7 @@ RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+
+# Audio effects
+PRODUCT_COPY_FILES += \
+    device/htc/flounder/audio_effects.conf:system/etc/audio_effects.conf
