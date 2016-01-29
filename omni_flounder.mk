@@ -60,7 +60,8 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 # AudioFX
 TARGET_USE_DEVICE_AUDIO_EFFECTS_CONF := true
 TARGET_IGNORE_VENDOR_AUDIO_EFFECTS_CONF := true
+PRODUCT_COPY_FILES += \
+    device/htc/flounder/audio_effects.conf:system/etc/audio_effects.conf
 
 # Enable vendor image symlink
 BOARD_NEEDS_VENDORIMAGE_SYMLINK := true
-
