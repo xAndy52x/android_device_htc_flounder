@@ -226,10 +226,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	VolantisKeyboard
 
-# for launcher layout
-PRODUCT_PACKAGES += \
-    VolantisLayout
-
 # Allows healthd to boot directly from charger mode rather than initiating a reboot.
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.enable_boot_charger_mode=1
