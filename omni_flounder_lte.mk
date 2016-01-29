@@ -14,21 +14,14 @@
 # limitations under the License.
 #
 
-# Sample: This is where we'd set a backup provider if we had one
-# $(call inherit-product, device/sample/products/backup_overlay.mk)
-
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common_tablet.mk)
+# Include from WiFi
+include device/htc/flounder/omni_flounder.mk
 
 # Inherrit GSM APNs
 $(call inherit-product, vendor/omni/config/gsm.mk)
 
-# Inherit device configuration
-$(call inherit-product, device/htc/flounder/aosp_flounder64.mk)
-
 # Inherrit LTE config
 $(call inherit-product, device/htc/flounder/device-lte.mk)
-$(call inherit-product-if-exists, vendor/htc/flounder_lte/device-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/lte_only_overlay
 
