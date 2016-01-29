@@ -129,3 +129,5 @@ MALLOC_IMPL := dlmalloc
 
 # Use the non-open-source parts, if they're present
 -include vendor/htc/flounder/BoardConfigVendor.mk
+
+-include vendor/lge/bullhead/BoardConfigVendor.mk

@@ -40,31 +40,9 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="volantis-user 6.0.1 MMB29S 2489379 release-keys" \
     BUILD_ID=MMB29S
 
-# Kernel settings
-KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/aarch64/aarch64-linux-android-4.9/bin
-KERNEL_TOOLCHAIN_PREFIX := aarch64-linux-android-
-TARGET_KERNEL_SOURCE := kernel/htc/flounder
-TARGET_KERNEL_CONFIG := flounder_defconfig
-BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-BOARD_KERNEL_CMDLINE := androidboot.selinux=enforcing
-
 # SELinux
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.selinux=1
 
-# TWRP
-TW_INCLUDE_CRYPTO := true
-TW_THEME := landscape_hdpi
-RECOVERY_SDCARD_ON_DATA := true
-BOARD_HAS_NO_REAL_SDCARD := true
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-
-# AudioFX
-TARGET_USE_DEVICE_AUDIO_EFFECTS_CONF := true
-TARGET_IGNORE_VENDOR_AUDIO_EFFECTS_CONF := true
 PRODUCT_COPY_FILES += \
     device/htc/flounder/audio_effects.conf:system/etc/audio_effects.conf
-
-# Enable vendor image symlink
-BOARD_NEEDS_VENDORIMAGE_SYMLINK := true
