@@ -20,16 +20,6 @@ PRODUCT_PACKAGES := \
     wpa_supplicant \
     wpa_supplicant.conf
 
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-ifeq ($(USE_SVELTE_KERNEL), true)
-LOCAL_KERNEL := device/htc/flounder_svelte-kernel/Image.gz-dtb
-else
-LOCAL_KERNEL := device/htc/flounder-kernel/Image.gz-dtb
-endif # USE_SVELTE_KERNEL
-else
-LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
-
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
 # This ensures the needed build tools are available.
@@ -44,7 +34,6 @@ LOCAL_FSTAB := $(LOCAL_PATH)/fstab.flounder
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
 PRODUCT_COPY_FILES := \
-    $(LOCAL_KERNEL):kernel \
     $(LOCAL_PATH)/init.flounder.rc:root/init.flounder.rc \
     $(LOCAL_PATH)/init.flounder.usb.rc:root/init.flounder.usb.rc \
     $(LOCAL_PATH)/init.recovery.flounder.rc:root/init.recovery.flounder.rc \
@@ -222,6 +211,12 @@ PRODUCT_PROPERTY_OVERRIDES := \
     ro.frp.pst=/dev/block/platform/sdhci-tegra.3/by-name/PST \
     ro.ril.def.agps.mode=1 \
     persist.tegra.compositor=glcomposer
+    
+# media props
+PRODUCT_PROPERTY_OVERRIDES += \
+    camera.flash_off=0 \
+    ro.com.widevine.cachesize=16777216
+     
 
 # setup dalvik vm configs.
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
@@ -274,17 +269,6 @@ ifneq (,$(filter userdebug, $(TARGET_BUILD_VARIANT)))
     $(call add-product-dex-preopt-module-config,services,--generate-mini-debug-info)
     $(call add-product-dex-preopt-module-config,wifi-service,--generate-mini-debug-info)
 endif
-
-# add verity dependencies
-$(call inherit-product, build/target/product/verity.mk)
-PRODUCT_SUPPORTS_BOOT_SIGNER := false
-PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/APP
-PRODUCT_VENDOR_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/VNR
-
-# for warning
-PRODUCT_PACKAGES += \
-    slideshow \
-    verity_warning_images
 
 $(call inherit-product-if-exists, hardware/nvidia/tegra132/tegra132.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra132/tegra132-vendor.mk)
