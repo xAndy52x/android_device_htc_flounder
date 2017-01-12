@@ -62,7 +62,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
 
@@ -89,6 +88,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.pro.xml:system/etc/permissions/android.hardware.audio.pro.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:system/etc/permissions/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:system/etc/permissions/android.hardware.nfc.hcef.xml \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
@@ -142,7 +142,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/qct/lib64/libloc_core.so:system/lib64/libloc_core.so \
     $(LOCAL_PATH)/gps/qct/lib64/libloc_ds_api.so:system/lib64/libloc_ds_api.so \
     $(LOCAL_PATH)/gps/qct/lib64/libloc_eng.so:system/lib64/libloc_eng.so \
-    $(LOCAL_PATH)/gps/qct/lib64/hw/gps.default.so:system/lib64/hw/gps.default.so
+    $(LOCAL_PATH)/gps/qct/lib64/hw/gps.default.so:system/lib64/hw/gps.default.so \
+    $(LOCAL_PATH)/gps/qct/lib_vendor/libmdmdetect.so:vendor/lib/libmdmdetect.so \
+    $(LOCAL_PATH)/gps/qct/lib_vendor/libperipheral_client.so:vendor/lib/libperipheral_client.so \
+    $(LOCAL_PATH)/gps/qct/lib64_vendor/libmdmdetect.so:vendor/lib64/libmdmdetect.so \
+    $(LOCAL_PATH)/gps/qct/lib64_vendor/libperipheral_client.so:vendor/lib64/libperipheral_client.so
+
 
 # NFC feature + config files
 PRODUCT_COPY_FILES += \
@@ -151,16 +156,23 @@ PRODUCT_COPY_FILES += \
     device/htc/flounder/nfc/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
     device/htc/flounder/nfc/libnfc-brcm-20795a10.conf:system/etc/libnfc-brcm-20795a10.conf
 
-PRODUCT_AAPT_CONFIG := normal large xlarge hdpi xhdpi xxhdpi
+PRODUCT_AAPT_CONFIG := normal large xlarge
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 PRODUCT_CHARACTERISTICS := tablet,nosdcard
 
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+ifneq ($(filter volantis volantisf, $(TARGET_PRODUCT)),)
+# Wifi-Only overlays.
+DEVICE_PACKAGE_OVERLAYS := \
+    $(LOCAL_PATH)/wifi_only_overlay \
+    $(LOCAL_PATH)/overlay
+else
+DEVICE_PACKAGE_OVERLAYS := \
+    $(LOCAL_PATH)/overlay
+endif
 
 # NFC packages
 PRODUCT_PACKAGES += \
-    com.android.nfc_extras \
     nfc_nci.bcm2079x.default \
     NfcNci \
     Tag \
@@ -172,7 +184,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.flounder \
     lights.flounder \
-    sensors.flounder
+    sensors.flounder \
+    thermal.flounder
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -198,6 +211,12 @@ PRODUCT_PROPERTY_OVERRIDES := \
     ro.frp.pst=/dev/block/platform/sdhci-tegra.3/by-name/PST \
     ro.ril.def.agps.mode=1 \
     persist.tegra.compositor=glcomposer
+    
+# media props
+PRODUCT_PROPERTY_OVERRIDES += \
+    camera.flash_off=0 \
+    ro.com.widevine.cachesize=16777216
+     
 
 # setup dalvik vm configs.
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
@@ -226,6 +245,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	VolantisKeyboard
 
+# for launcher layout
+#PRODUCT_PACKAGES += \
+#    VolantisLayout
+
 # Allows healthd to boot directly from charger mode rather than initiating a reboot.
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.enable_boot_charger_mode=1
@@ -236,15 +259,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     af.fast_track_multiplier=1 \
     audio_hal.period_size=128
 
-# add verity dependencies
-PRODUCT_SUPPORTS_BOOT_SIGNER := false
-PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/APP
-PRODUCT_VENDOR_VERITY_PARTITION := /dev/block/platform/sdhci-tegra.3/by-name/VNR
-
-# for warning
-PRODUCT_PACKAGES += \
-    slideshow \
-    verity_warning_images
+# In userdebug, add minidebug info the the boot image and the system server to support
+# diagnosing native crashes.
+ifneq (,$(filter userdebug, $(TARGET_BUILD_VARIANT)))
+    # Boot image.
+    PRODUCT_DEX_PREOPT_BOOT_FLAGS += --generate-mini-debug-info
+    # System server and some of its services.
+    # Note: we cannot use PRODUCT_SYSTEM_SERVER_JARS, as it has not been expanded at this point.
+    $(call add-product-dex-preopt-module-config,services,--generate-mini-debug-info)
+    $(call add-product-dex-preopt-module-config,wifi-service,--generate-mini-debug-info)
+endif
 
 $(call inherit-product-if-exists, hardware/nvidia/tegra132/tegra132.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra132/tegra132-vendor.mk)
