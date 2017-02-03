@@ -18,7 +18,7 @@
 # $(call inherit-product, device/sample/products/backup_overlay.mk)
 
 # Inherit from our custom product configuration
-$(call inherit-product, vendor/omni/config/common_tablet.mk)
+include vendor/omni/config/common_tablet.mk
 
 # Omni specific board config
 include device/htc/flounder/BoardConfigOmni.mk
@@ -49,3 +49,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_COPY_FILES += \
     device/htc/flounder/audio_effects.conf:system/etc/audio_effects.conf
+
+# Disable DEXPREOPT as it seems to break Wifi
+WITH_DEXPREOPT := false
