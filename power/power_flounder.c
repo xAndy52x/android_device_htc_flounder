@@ -39,8 +39,8 @@
 #define WAKE_GESTURE_PATH "/sys/devices/platform/spi-tegra114.2/spi_master/spi2/spi2.0/input/input0/wake_gesture"
 #define GPU_BOOST_PATH "/dev/constraint_gpu_freq"
 #define IO_IS_BUSY_PATH "/sys/devices/system/cpu/cpufreq/interactive/io_is_busy"
-#define LOW_POWER_MAX_FREQ "1020000"
-#define NORMAL_MAX_FREQ "2901000"
+#define LOW_POWER_MAX_FREQ "1428000"
+#define NORMAL_MAX_FREQ "2499000"
 #define GPU_FREQ_CONSTRAINT "852000 852000 -1 2000"
 #define SVELTE_PROP "ro.boot.svelte"
 #define SVELTE_MAX_FREQ_PROP "ro.config.svelte.max_cpu_freq"
@@ -98,17 +98,17 @@ static void power_init(struct power_module __unused *module)
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/timer_slack",
                 "20000");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/min_sample_time",
-                "80000");
+                "40000");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/hispeed_freq",
-                "1530000");
+                "2091000");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load",
-                "99");
+                "85");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/target_loads",
-                "65 228000:75 624000:85");
+                "228000:70 994500:80 2193000:90");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay",
-                "20000");
+                "19000 2091000:39000");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration",
-                "1000000");
+                "0");
     sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/io_is_busy", "0");
 
     calculate_max_cpu_freq();
@@ -123,7 +123,7 @@ static void power_set_interactive(struct power_module __unused *module, int on)
      */
     sysfs_write(CPU_MAX_FREQ_PATH,
                 (!on || low_power_mode) ? low_power_max_cpu_freq : max_cpu_freq);
-    sysfs_write(IO_IS_BUSY_PATH, on ? "1" : "0");
+    sysfs_write(IO_IS_BUSY_PATH, on ? "0" : "0");
     sysfs_write(FACEDOWN_PATH, on ? "0" : "1");
     sysfs_write(TOUCH_SYNA_INTERACTIVE_PATH, on ? "1" : "0");
     ALOGV("power_set_interactive: %d done\n", on);
@@ -251,4 +251,3 @@ struct flounder_power_module HAL_MODULE_INFO_SYM = {
     boostpulse_fd: -1,
     boostpulse_warned: 0,
 };
-
